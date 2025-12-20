@@ -1,0 +1,43 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  application:
+    name: shop_project
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    username: postgres
+    password: 2012
+  flyway:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    user: postgres
+    password: 2012
+    locations: filesystem:db/migration
+    enabled: true
+    baseline-on-migrate: true
+  kafka:
+    listener:
+      type: batch
+    bootstrap-servers: ${kafka-settings.bootstrap-servers}
+    consumer:
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      max-poll-records: 100
+      properties:
+        fetch.max.wait.ms: 500
+        session.timeout.ms: 60000
+        heartbeat.interval.ms: 3000
+        max.poll.interval.ms: 300000
+        auto.commit.interval.ms: 5000
+
+kafka-settings:
+  bootstrap-servers: kafka:29092
+  group-id: universe-labs-oms-consumer
+  oms-order-created-topic: oms_order_created
+  oms-order-status-changed-topic: oms_order_status_changed
+
+server:
+  port: 8081
+
+

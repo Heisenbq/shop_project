@@ -1,0 +1,24 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  application:
+    name: shop_project
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    username: postgres
+    password: 2012
+  flyway:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    user: postgres
+    password: 2012
+    locations: filesystem:db/migration
+    enabled: true
+    baseline-on-migrate: true
+
+kafka-settings:
+  bootstrap-servers: kafka:29092
+  client-id: universe-labs-oms
+  oms-order-created-topic: oms_order_created
+  oms-order-status-changed-topic: oms_order_status_changed

@@ -1,0 +1,57 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  application:
+    name: shop_project
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    username: postgres
+    password: 2012
+    hikari:
+      maximum-pool-size: 10
+      idle-timeout: 300000        # 300 секунд
+      keepalive-time: 300000      # 300 секунд
+      pool-name: HikariPool
+  flyway:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    user: postgres
+    password: 2012
+    locations: filesystem:db/migration
+    enabled: true
+    baseline-on-migrate: true
+  kafka:
+    listener:
+      type: batch
+    bootstrap-servers: ${kafka-settings.bootstrap-servers}
+    consumer:
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      max-poll-records: 100
+      properties:
+        fetch.max.wait.ms: 500
+        session.timeout.ms: 60000
+        heartbeat.interval.ms: 3000
+        max.poll.interval.ms: 300000
+        auto.commit.interval.ms: 5000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.jdbc.batch_size: 50   # batch insert/update
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+
+kafka-settings:
+  bootstrap-servers: kafka:29092
+  group-id: universe-labs-oms-consumer
+  oms-order-created-topic: oms_order_created
+  oms-order-status-changed-topic: oms_order_status_changed
+
+server:
+  port: 8081

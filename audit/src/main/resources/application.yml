@@ -1,0 +1,51 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  application:
+    name: shop_project
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    username: postgres
+    password: 2012
+  flyway:
+    url: jdbc:postgresql://localhost:5432/Marketplace
+    user: postgres
+    password: 2012
+    locations: filesystem:db/migration
+    enabled: true
+    baseline-on-migrate: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    orderCreated:
+      queue: oms.order.created
+      batchSize: 100
+      batchTimeoutSeconds: 1
+      deadLetter:
+        dlx: oms.order.dlx
+        dlq: oms.order.created.dlq
+        routingKey: order.created
+    orderStatusChanged:
+      queue: oms.order.status.changed
+      batchSize: 100
+      batchTimeoutSeconds: 1
+      deadLetter:
+        dlx: oms.order.dlx
+        dlq: oms.order.status.changed.dlq
+        routingKey: order.status.changed
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 10
+          initial-interval: 3000
+          multiplier: 1.5
+
+server:
+  port: 8081
+
+
